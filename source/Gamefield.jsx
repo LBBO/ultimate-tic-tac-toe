@@ -15,6 +15,7 @@ export default class Gamefield extends React.Component {
 		}
 		this.field[0][0] = this.playerO;
 		this.field[1][1] = this.playerX;
+		this.currentPlayer = this.playerX;
 	}
 
 	render() {
