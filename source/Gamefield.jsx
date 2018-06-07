@@ -6,11 +6,15 @@ export default class Gamefield extends React.Component {
 		super();
 
 		this.field = [];
-		this.emptyPlayer = new Player('', 'X');
+		this.emptyPlayer = new Player('', '');
+		this.playerO = new Player('', 'O');
+		this.playerX = new Player('', 'X');
 
 		for(let i = 0; i < 3; i++) {
 			this.field.push([this.emptyPlayer, this.emptyPlayer, this.emptyPlayer]);
 		}
+		this.field[0][0] = this.playerO;
+		this.field[1][1] = this.playerX;
 	}
 
 	render() {

@@ -1,7 +1,33 @@
-h1.sample
+html, body
   font-family: Arial, sans-serif
-  text-align: center
-  margin: 3em auto
 
 .wrapper
   display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  grid-template-rows: 1fr 1fr 1fr
+  background-color: #8A85BD
+  place-items: center
+  width: 340px
+  height: 340px
+  overflow: hidden
+
+  div
+    border: 10px solid rgba(0, 0, 0, 0)
+    border-right-color: #746FA7
+    border-bottom-color: #746FA7
+    width: 100%
+    height: 100%
+    display: grid
+    place-content: center
+
+    &:nth-child(3n)
+      border-right: none
+
+    &:nth-child(3n - 2)
+      border-left: none
+
+    &:nth-last-child(-n + 3)
+      border-bottom: none
+
+    &:nth-child(-n + 3)
+      border-top: none
