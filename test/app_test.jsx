@@ -1,15 +1,12 @@
 import React from "react"
-import TestUtils from "react-addons-test-utils"
 import App from "app"
 import { assert } from "chai"
+import { mount } from "enzyme"
 
 describe("App component", () => {
-
   it("Display headline", () => {
-    const rendered = TestUtils.renderIntoDocument(<App />)
+    const wrapper = mount(<App />)
 
-    const comp = TestUtils.findRenderedDOMComponentWithTag(rendered, 'h1')
-    assert.strictEqual(comp.textContent, "Insert Tic Tac Toe here.")
+    assert.strictEqual(wrapper.find("h1").text(), "Insert Tic Tac Toe here.")
   })
-
 })
