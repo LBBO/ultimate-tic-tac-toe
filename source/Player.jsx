@@ -1,6 +1,6 @@
 export default class Player {
-	constructor(name, symbol) {
+	constructor(name, svg) {
 		this.name = name;
-		this.symbol = symbol;
+		this.svg = svg;
 	}
 }

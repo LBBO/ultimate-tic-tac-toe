@@ -2,7 +2,8 @@ html, body
   font-family: "Segoe UI", "Letter Gothic Std", Arial, sans-serif
   padding: 0
   margin: 0
-  background-color: #f8f8f8
+  background-color: #6C6C73
+  //background-color: #f8f8f8
 
   #app
     display: grid
@@ -10,59 +11,116 @@ html, body
     width: 100%
     height: 100%
 
-    .header
+    >div
       display: grid
       place-items: center
+      width: 500px
+      height: 500px
+      grid-gap: 20px
 
-      .title
-        color: #6c6c73
-        font-size: 2.5em
+      &.gameIsNotRunning
+        background-color: #ECECEE
 
-    .footer
-      color: #b2b2b6
+        .header
+          grid-template-columns: auto
+          grid-template-rows: auto
+          grid-template-areas: "title"
 
-    .gameIsNotRunning
-      .wrapper
-        background-color: #ececee
+        .wrapper
+          div
+            border-right-color: #E7E7EA
+            border-bottom-color: #E7E7EA
 
-        div
-          border-right-color: #e7e7ea
-          border-bottom-color: #e7e7ea
+      &.gameIsRunning
+        background-color: #8A85BD
 
-    .gameIsRunning
-      .wrapper
-        background-color: #8a85bd
+        .header
+          grid-template-columns: 100px auto 100px
+          grid-template-rows: auto
+          grid-template-areas: ". title abort"
 
-        div
-          border-right-color: #746FA7
-          border-bottom-color: #746FA7
+        .wrapper
+          div
+            border-right-color: #746FA7
+            border-bottom-color: #746FA7
 
-    .wrapper
-      display: grid
-      grid-template-columns: 1fr 1fr 1fr
-      grid-template-rows: 1fr 1fr 1fr
-      place-items: center
-      width: 340px
-      height: 340px
-      overflow: hidden
-
-      div
-        border: 10px solid rgba(0, 0, 0, 0)
+      .header, .footer
+        height: 70px
+        background-color: #F8F8F8
         width: 100%
-        height: 100%
+
+      .header
         display: grid
-        place-content: center
-        font-weight: 900
-        font-size: 4em
+        place-items: center
 
-        &:nth-child(3n)
-          border-right: none
+        .title
+          color: #6C6C73
+          font-size: 2.6em
+          grid-area: title
 
-        &:nth-child(3n - 2)
-          border-left: none
+        .abort
+          grid-area: abort
+          color: #E390C3
+          text-decoration: underline
+          cursor: pointer
 
-        &:nth-last-child(-n + 3)
-          border-bottom: none
+      .footer
+        color: #9C9CAC
+        font-size: 1.4em
+        display: grid
+        place-items: center
 
-        &:nth-child(-n + 3)
-          border-top: none
+        .newGame
+          background-color: #21C3A8
+          color: #FFFFFF
+          padding: 7px 50px
+          border-radius: 50px
+          cursor: pointer
+
+        .userTurn
+          display: grid
+          grid-template-rows: auto
+          grid-template-columns: auto auto
+          place-items: center
+
+          svg
+            width: 40px
+            height: 40px
+
+      .wrapper
+        display: grid
+        grid-template-columns: 1fr 1fr 1fr
+        grid-template-rows: 1fr 1fr 1fr
+        place-items: center
+        width: 340px
+        height: 340px
+        overflow: hidden
+        grid-gap: 5px
+
+        div
+          border: 10px solid rgba(0, 0, 0, 0)
+          width: 100%
+          height: 100%
+          display: grid
+          place-content: center
+          font-weight: 900
+          font-size: 4em
+
+          svg
+            width: 70px
+            height: 70px
+
+          &.empty
+            cursor: pointer
+
+          &:nth-child(3n)
+            border-right: none
+
+          &:nth-child(3n - 2)
+            border-left: none
+
+          &:nth-last-child(-n + 3)
+            border-bottom: none
+
+          &:nth-child(-n + 3)
+            border-top: none

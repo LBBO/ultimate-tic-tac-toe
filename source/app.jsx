@@ -20,7 +20,7 @@ export default class App extends Component {
 		return (
 			<div className="header">
 				<span className="title">TICK TACK</span>
-				{this.state.gameIsRunning ? <span className="abort" onClick={this.abort}>Abort</span> : null}
+				{this.state.gameIsRunning ? <span className="abort" onClick={this.abort}>ABORT</span> : null}
 			</div>
 		);
 	}
@@ -35,7 +35,7 @@ export default class App extends Component {
 		} else {
 			return (
 				<div className="footer">
-					<span className="userTurn">{this.state.gameField.currentPlayer.symbol}'s Turn</span>
+					<span className="userTurn">{this.state.gameField.state.currentPlayer.svg}s TURN</span>
 				</div>
 			);
 		}
@@ -54,7 +54,6 @@ export default class App extends Component {
 	}
 
 	render() {
-		console.log('state', this.state);
 		return (
 			//<h1 className={"sample"}>Insert Tic Tac Toe here.</h1>
 			<div className={'game ' + (this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning')}>
@@ -62,7 +61,6 @@ export default class App extends Component {
 				{/*this.state.gameField.render()*/}
 				<Gamefield ref={(gameField) => {
 				this.state.gameField = gameField;
-				console.log(gameField);
 				}}></Gamefield>
 				{this.renderBottom()}
 			</div>
