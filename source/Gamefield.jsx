@@ -67,9 +67,6 @@ export default class Gamefield extends React.Component {
 		}
 		
 		this.state.currentPlayer = firstPlayer;
-		
-		//@todo only set state when component is mounted
-		this.setState(this.state);
 	}
 	
 	start() {
