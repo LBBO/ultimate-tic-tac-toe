@@ -6,9 +6,42 @@ export default class Gamefield extends React.Component {
 		super(props);
 		
 		this.state = {};
-		this.nobody = new Player('', '');
-		this.playerO = new Player('', 'O');
-		this.playerX = new Player('', 'X');
+		this.nobody = new Player('empty', '');
+		this.playerO = new Player('O',
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
+				<line style={{
+						"fill": "none",
+						"fillOpacity": "0",
+						"stroke": "#3a3b63",
+						"strokeWidth": "10",
+						"strokeMiterlimit": "4",
+						"strokeDasharray": "none",
+						"strokeOpacity": "1"
+					}} x1="10" x2="90" y1="10" y2="90" />
+				<line style={{
+						"fill": "none",
+						"fillOpacity": "0",
+						"stroke": "#3a3b63",
+						"strokeWidth": "10",
+						"strokeMiterlimit": "4",
+						"strokeDasharray": "none",
+						"strokeOpacity": "1"
+					}} x1="10" x2="90" y1="90" y2="10" />
+			</svg>
+		);
+		this.playerX = new Player('X',
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
+				<circle style={{
+					"fill": "none",
+					"fillOpacity": "0",
+					"stroke": "#73dce6",
+					"strokeWidth": "10",
+					"strokeMiterlimit": "4",
+					"strokeDasharray": "none",
+					"strokeOpacity": "1"
+				}} cx="50" cy="50" r="40" />
+			</svg>
+		);
 
 		this.state.currentPlayer = this.playerX;
 		this.init = this.init.bind(this);
@@ -61,7 +94,9 @@ export default class Gamefield extends React.Component {
 				{this.state.field
 					.reduce((acc, curr) => acc.concat(curr))
 					.map((player, index) =>
-							 <div key={index} onClick={this.generateOnTileClickHandler(index)}>{player.symbol}</div>
+							 <div key={index} onClick={this.generateOnTileClickHandler(index)} className={player.name}>
+								 {player.svg}
+							 </div>
 					)
 				}
 			</div>
