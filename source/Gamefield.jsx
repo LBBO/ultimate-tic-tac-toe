@@ -68,6 +68,10 @@ export default class Gamefield extends React.Component {
 		
 		this.state.currentPlayer = firstPlayer;
 	}
+
+	otherRealPlayer(player) {
+		return player == this.playerO ? this.playerX : this.playerO;
+	}
 	
 	start() {
 		this.state.isRunning = true;
@@ -80,7 +84,7 @@ export default class Gamefield extends React.Component {
 		return () => {
 			if (this.state.isRunning && this.state.field[row][col] === this.nobody) {
 				this.state.field[row][col] = this.state.currentPlayer;
-				this.state.currentPlayer = this.state.currentPlayer === this.playerO ? this.playerX : this.playerO;
+				this.state.currentPlayer = this.otherRealPlayer(this.state.currentPlayer);
 				this.state.moves++;
 				this.checkForWin();
 				this.setState({});

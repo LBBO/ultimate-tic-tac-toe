@@ -11,6 +11,8 @@ export default class App extends Component {
 			gameField: null
 		};
 
+		this.beginningPlayer = undefined;
+
 		this.renderBottom = this.renderBottom.bind(this);
 		this.renderTitle = this.renderTitle.bind(this);
 		this.abort = this.abort.bind(this);
@@ -46,14 +48,14 @@ export default class App extends Component {
 	
 	abort() {
 		this.state.gameIsRunning = false;
-		this.state.gameField.init();
+		this.state.gameField.init(this.beginningPlayer);
 		this.forceRender();
 	}
 	
 	startGame() {
 		this.state.gameIsRunning = true;
 		this.state.isWon = false;
-		this.state.gameField.init();
+		this.state.gameField.init(this.beginningPlayer);
 		this.state.gameField.start();
 		this.forceRender();
 	}
@@ -66,28 +68,26 @@ export default class App extends Component {
 		this.state.isWon = true;
 		this.state.gameIsRunning = false;
 
-		let nextFirstPlayer;
+		//Verlierer soll anfangen, bei unentschieden derjenige, der als naechstes dran gewesen waere
 		switch(this.state.gameField.state.winner.name) {
 			case 'X':
-				nextFirstPlayer = this.state.gameField.playerO;
+				this.beginningPlayer = this.state.gameField.playerO;
 				break;
 			case 'O':
-				nextFirstPlayer = this.state.gameField.playerX;
+				this.beginningPlayer = this.state.gameField.playerX;
 				break;
 			default:
-				nextFirstPlayer = this.state.gameField.currentPlayer;
+				this.beginningPlayer = this.state.gameField.otherRealPlayer(this.state.gameField.state.currentPlayer);
+				break;
 		}
 
 		this.forceRender();
 	}
 
 	render() {
-		console.log(this.state.isWon);
 		return (
-			//<h1 className={"sample"}>Insert Tic Tac Toe here.</h1>
 			<div className={'game ' + (this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning')}>
 				{this.renderTitle()}
-				{/*this.state.gameField.render()*/}
 				{this.state.isWon ?
 					<div className="winScreen">
 						<span className="winner">{
