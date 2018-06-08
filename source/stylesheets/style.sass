@@ -1,54 +1,68 @@
 html, body
-  font-family: Arial, sans-serif
-
-  .header, .footer
+  font-family: "Segoe UI", "Letter Gothic Std", Arial, sans-serif
+  padding: 0
+  margin: 0
   background-color: #f8f8f8
 
-  .footer
-    color: #b2b2b6
-
-  .gameIsNotRunning
-    .wrapper
-      background-color: #ececee
-
-      div
-        border-right-color: #e7e7ea
-        border-bottom-color: #e7e7ea
-
-  .gameIsRunning
-    .wrapper
-      background-color: #8a85bd
-
-      div
-        border-right-color: #746FA7
-        border-bottom-color: #746FA7
-
-  .wrapper
+  #app
     display: grid
-    grid-template-columns: 1fr 1fr 1fr
-    grid-template-rows: 1fr 1fr 1fr
     place-items: center
-    width: 340px
-    height: 340px
-    overflow: hidden
+    width: 100%
+    height: 100%
 
-    div
-      border: 10px solid rgba(0, 0, 0, 0)
-      width: 100%
-      height: 100%
+    .header
       display: grid
-      place-content: center
-      font-weight: 900
-      font-size: 4em
+      place-items: center
 
-      &:nth-child(3n)
-        border-right: none
+      .title
+        color: #6c6c73
+        font-size: 2.5em
 
-      &:nth-child(3n - 2)
-        border-left: none
+    .footer
+      color: #b2b2b6
 
-      &:nth-last-child(-n + 3)
-        border-bottom: none
+    .gameIsNotRunning
+      .wrapper
+        background-color: #ececee
 
-      &:nth-child(-n + 3)
-        border-top: none
+        div
+          border-right-color: #e7e7ea
+          border-bottom-color: #e7e7ea
+
+    .gameIsRunning
+      .wrapper
+        background-color: #8a85bd
+
+        div
+          border-right-color: #746FA7
+          border-bottom-color: #746FA7
+
+    .wrapper
+      display: grid
+      grid-template-columns: 1fr 1fr 1fr
+      grid-template-rows: 1fr 1fr 1fr
+      place-items: center
+      width: 340px
+      height: 340px
+      overflow: hidden
+
+      div
+        border: 10px solid rgba(0, 0, 0, 0)
+        width: 100%
+        height: 100%
+        display: grid
+        place-content: center
+        font-weight: 900
+        font-size: 4em
+
+        &:nth-child(3n)
+          border-right: none
+
+        &:nth-child(3n - 2)
+          border-left: none
+
+        &:nth-last-child(-n + 3)
+          border-bottom: none
+
+        &:nth-child(-n + 3)
+          border-top: none

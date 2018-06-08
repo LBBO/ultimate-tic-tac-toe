@@ -7,7 +7,7 @@ export default class App extends Component {
 
 		this.state = {
 			gameIsRunning: false,
-			gameField: new Gamefield()
+			gameField: null
 		};
 
 		this.renderBottom = this.renderBottom.bind(this);
@@ -19,7 +19,7 @@ export default class App extends Component {
 	renderTitle() {
 		return (
 			<div className="header">
-				<span>TICK TACK</span>
+				<span className="title">TICK TACK</span>
 				{this.state.gameIsRunning ? <span className="abort" onClick={this.abort}>Abort</span> : null}
 			</div>
 		);
@@ -43,20 +43,27 @@ export default class App extends Component {
 	
 	abort() {
 		this.state.gameIsRunning = false;
+		this.state.gameField.init();
 		this.setState(this.state);
 	}
 	
 	startGame() {
 		this.state.gameIsRunning = true;
+		this.state.gameField.start();
 		this.setState(this.state);
 	}
 
 	render() {
+		console.log('state', this.state);
 		return (
 			//<h1 className={"sample"}>Insert Tic Tac Toe here.</h1>
-			<div className={this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning'}>
+			<div className={'game ' + (this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning')}>
 				{this.renderTitle()}
-				{this.state.gameField.render()}
+				{/*this.state.gameField.render()*/}
+				<Gamefield ref={(gameField) => {
+				this.state.gameField = gameField;
+				console.log(gameField);
+				}}></Gamefield>
 				{this.renderBottom()}
 			</div>
 		);
