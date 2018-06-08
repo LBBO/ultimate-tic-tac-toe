@@ -39,7 +39,7 @@ export default class Gamefield extends React.Component {
 		this.state = {};
 
 		this.notifyParentOnTileClick = props.onTileClick;
-		this.notifyParentOnWin = props.onWin;
+		this.notifyParentOfWin = props.onWin;
 
 		this.nobody = new Player('empty', '');
 		this.playerX = new Player('X', playerX_SVG);
@@ -87,42 +87,43 @@ export default class Gamefield extends React.Component {
 				this.state.field[row][col] = this.state.currentPlayer;
 				this.state.moves++;
 				this.state.currentPlayer = this.otherRealPlayer(this.state.currentPlayer);
-				this.checkForWin();
+				this.checkForWin(row, col);
 				this.notifyParentOnTileClick();
 				this.setState({});
 			}
 		};
 	}
+
+	winnerOfCombo(combo) {
+		return combo.reduce((currWinner, currPlayer) => currPlayer === currWinner ? currWinner : this.nobody);
+	}
 	
-	checkForWin() {
+	checkForWin(changedRowIndex, changedColIndex) {
 		if (this.state.moves >= 5) {
-			let combos = [
-				//these will be filled with the diagonals
-				[], []
-			];
 
-			for (let i = 0; i < this.state.field.length; i++) {
-				const row = this.state.field[i];
-				const col = this.state.field.map(row => row[i]);
+			//check changed row
+			this.state.winner = this.winnerOfCombo(this.state.field[changedRowIndex]);
 
-				combos.push(row);
-				combos.push(col);
-				combos[0].push(this.state.field[i][i]);
-				combos[1].push(this.state.field[this.state.field.length - 1 - i][this.state.field.length - 1 - i]);
+			//check changed col
+			if (this.state.winner === this.nobody) {
+				this.state.winner = this.winnerOfCombo(this.state.field.map(row => row[changedColIndex]));
 			}
 
-			const winnerOfCombo = combo => combo.reduce((currWinner, currPlayer) => currPlayer === currWinner
-				? currWinner
-				: this.nobody);
+			//check diagonal from top left to bottom right if it was changed
+			//(diagonal from top left to bottom right has identical rowIndex and colIndex)
+			if (this.state.winner === this.nobody && changedColIndex === changedRowIndex) {
+				this.state.winner = this.winnerOfCombo(this.state.field.map((row, i) => row[i]));
+			}
 
-			this.state.winner = combos.reduce(
-				(winner, currCombo) => winner == this.nobody ? winnerOfCombo(currCombo) : winner,
-				this.nobody
-			);
+			//check diagonal from top right to bottom left if it was changed
+			//(diagonal from top right to bottom left has "inverted" rowIndex and colIndex)
+			if (this.state.winner === this.nobody && changedColIndex === this.state.field.length - 1 - changedRowIndex) {
+				this.state.winner = this.winnerOfCombo(this.state.field.map((row, i) => row[this.state.field.length - 1 - i]));
+			}
 
 			if (this.state.winner != this.nobody || this.state.moves >= 9) {
 				this.state.isWon = true;
-				this.notifyParentOnWin();
+				this.notifyParentOfWin();
 			}
 		}
 	}
