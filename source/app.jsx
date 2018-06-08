@@ -14,6 +14,7 @@ export default class App extends Component {
 		this.renderTitle = this.renderTitle.bind(this);
 		this.abort = this.abort.bind(this);
 		this.startGame = this.startGame.bind(this);
+		this.forceRender = this.forceRender.bind(this);
 	}
 	
 	renderTitle() {
@@ -44,12 +45,16 @@ export default class App extends Component {
 	abort() {
 		this.state.gameIsRunning = false;
 		this.state.gameField.init();
-		this.setState(this.state);
+		this.forceRender();
 	}
 	
 	startGame() {
 		this.state.gameIsRunning = true;
 		this.state.gameField.start();
+		this.forceRender();
+	}
+
+	forceRender() {
 		this.setState(this.state);
 	}
 
@@ -61,7 +66,7 @@ export default class App extends Component {
 				{/*this.state.gameField.render()*/}
 				<Gamefield ref={(gameField) => {
 				this.state.gameField = gameField;
-				}}></Gamefield>
+				}} onTileClick={this.forceRender}></Gamefield>
 				{this.renderBottom()}
 			</div>
 		);

@@ -4,6 +4,7 @@ import Player from "./Player.jsx";
 export default class Gamefield extends React.Component {
 	constructor(props) {
 		super(props);
+		this.notifyParentOnTileClick = props.onTileClick;
 		
 		this.state = {};
 		this.nobody = new Player('empty', '');
@@ -80,6 +81,7 @@ export default class Gamefield extends React.Component {
 				this.state.currentPlayer = this.state.currentPlayer === this.playerO ? this.playerX : this.playerO;
 				this.checkForWin();
 				this.setState({});
+				this.notifyParentOnTileClick();
 			}
 		};
 	}
