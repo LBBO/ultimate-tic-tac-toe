@@ -7,7 +7,6 @@ export default class App extends Component {
 
 		this.state = {
 			gameIsRunning: false,
-			isWon: false,
 			gameField: null
 		};
 
@@ -54,7 +53,6 @@ export default class App extends Component {
 	
 	startGame() {
 		this.state.gameIsRunning = true;
-		this.state.isWon = false;
 		this.state.gameField.init(this.beginningPlayer);
 		this.state.gameField.start();
 		this.forceRender();
@@ -65,10 +63,9 @@ export default class App extends Component {
 	}
 
 	win() {
-		this.state.isWon = true;
 		this.state.gameIsRunning = false;
 
-		//Verlierer soll anfangen, bei unentschieden derjenige, der als naechstes dran gewesen waere
+		//Verlierer soll anfangen, bei Unentschieden derjenige, der diese Runde nicht begonnen hat
 		switch(this.state.gameField.state.winner.name) {
 			case 'X':
 				this.beginningPlayer = this.state.gameField.playerO;
@@ -77,7 +74,7 @@ export default class App extends Component {
 				this.beginningPlayer = this.state.gameField.playerX;
 				break;
 			default:
-				this.beginningPlayer = this.state.gameField.otherRealPlayer(this.state.gameField.state.currentPlayer);
+				this.beginningPlayer = this.state.gameField.state.currentPlayer;
 				break;
 		}
 
@@ -88,7 +85,7 @@ export default class App extends Component {
 		return (
 			<div className={'game ' + (this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning')}>
 				{this.renderTitle()}
-				{this.state.isWon ?
+				{(this && this.state.gameField && this.state.gameField.state.isWon) ?
 					<div className="winScreen">
 						<span className="winner">{
 							this.state.gameField.state.winner.svg == '' ? 'NOBODY' : this.state.gameField.state.winner.svg

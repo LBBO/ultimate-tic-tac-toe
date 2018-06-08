@@ -1,6 +1,38 @@
 import React from "react";
 import Player from "./Player.jsx";
 
+const playerX_SVG = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
+	<line style={{
+						"fill": "none",
+						"fillOpacity": "0",
+						"stroke": "#3a3b63",
+						"strokeWidth": "10",
+						"strokeMiterlimit": "4",
+						"strokeDasharray": "none",
+						"strokeOpacity": "1"
+					}} x1="10" x2="90" y1="10" y2="90" />
+	<line style={{
+						"fill": "none",
+						"fillOpacity": "0",
+						"stroke": "#3a3b63",
+						"strokeWidth": "10",
+						"strokeMiterlimit": "4",
+						"strokeDasharray": "none",
+						"strokeOpacity": "1"
+					}} x1="10" x2="90" y1="90" y2="10" />
+</svg>;
+const playerO_SVG = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
+	<circle style={{
+				"fill": "none",
+				"fillOpacity": "0",
+				"stroke": "#73dce6",
+				"strokeWidth": "10",
+				"strokeMiterlimit": "4",
+				"strokeDasharray": "none",
+				"strokeOpacity": "1"
+			}} cx="50" cy="50" r="40" />
+</svg>;
+
 export default class Gamefield extends React.Component {
 	constructor(props) {
 		super(props);
@@ -10,41 +42,8 @@ export default class Gamefield extends React.Component {
 		this.notifyParentOnWin = props.onWin;
 
 		this.nobody = new Player('empty', '');
-		this.playerX = new Player('X',
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
-				<line style={{
-						"fill": "none",
-						"fillOpacity": "0",
-						"stroke": "#3a3b63",
-						"strokeWidth": "10",
-						"strokeMiterlimit": "4",
-						"strokeDasharray": "none",
-						"strokeOpacity": "1"
-					}} x1="10" x2="90" y1="10" y2="90" />
-				<line style={{
-						"fill": "none",
-						"fillOpacity": "0",
-						"stroke": "#3a3b63",
-						"strokeWidth": "10",
-						"strokeMiterlimit": "4",
-						"strokeDasharray": "none",
-						"strokeOpacity": "1"
-					}} x1="10" x2="90" y1="90" y2="10" />
-			</svg>
-		);
-		this.playerO = new Player('O',
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" version="1.1">
-				<circle style={{
-					"fill": "none",
-					"fillOpacity": "0",
-					"stroke": "#73dce6",
-					"strokeWidth": "10",
-					"strokeMiterlimit": "4",
-					"strokeDasharray": "none",
-					"strokeOpacity": "1"
-				}} cx="50" cy="50" r="40" />
-			</svg>
-		);
+		this.playerX = new Player('X', playerX_SVG);
+		this.playerO = new Player('O', playerO_SVG);
 		
 		this.state.currentPlayer = this.playerX;
 		this.init = this.init.bind(this);
@@ -57,11 +56,11 @@ export default class Gamefield extends React.Component {
 	
 	init(firstPlayer = this.playerO) {
 		this.state.isRunning = false;
-		this.state.isWon = false;
-		this.state.field = [];
-		this.state.moves = 0;
 		this.state.winner = this.nobody;
-		
+		this.state.isWon = false;
+		this.state.moves = 0;
+		this.state.field = [];
+
 		for (let i = 0; i < 3; i++) {
 			this.state.field.push([this.nobody, this.nobody, this.nobody]);
 		}
@@ -81,20 +80,22 @@ export default class Gamefield extends React.Component {
 	generateOnTileClickHandler(index) {
 		const row = Math.floor(index / 3);
 		const col = index % 3;
+
 		return () => {
+			//only accept click if field isn't empty
 			if (this.state.isRunning && this.state.field[row][col] === this.nobody) {
 				this.state.field[row][col] = this.state.currentPlayer;
-				this.state.currentPlayer = this.otherRealPlayer(this.state.currentPlayer);
 				this.state.moves++;
+				this.state.currentPlayer = this.otherRealPlayer(this.state.currentPlayer);
 				this.checkForWin();
-				this.setState({});
 				this.notifyParentOnTileClick();
+				this.setState({});
 			}
 		};
 	}
 	
 	checkForWin() {
-		if (this.state.moves >= 0) {
+		if (this.state.moves >= 5) {
 			let combos = [
 				//these will be filled with the diagonals
 				[], []
@@ -139,9 +140,5 @@ export default class Gamefield extends React.Component {
 				}
 			</div>
 		);
-	}
-	
-	makeMove(player, position) {
-		this.state.field[position[0]][position[1]] = player;
 	}
 }
