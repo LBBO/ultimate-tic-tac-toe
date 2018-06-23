@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Gamefield from "./Gamefield.jsx";
 
 export default class App extends Component {

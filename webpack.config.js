@@ -1,29 +1,52 @@
-var
-  path = require("path"),
-  webpack = require("webpack");
+var path = require("path");
 
 module.exports = {
   entry: {
-    bundle: "entry.jsx",
-    test: "mocha!test.js"
+    bundle: path.resolve(__dirname, "source", "entry.jsx"),
+    test: path.resolve(__dirname, "test", "test.js")
   },
   output: {
     path: path.join(__dirname, "release"),
+    publicPath: "/",
     filename: "[name].js"
   },
+  devServer: {
+    contentBase: path.join(__dirname, "release")
+  },
   module: {
-    loaders: [
-      { test: /\.sass$/, loader: "style!css!sass?indentedSyntax" },
-      { test: /\.html/, loader: 'file?name=[name].[ext]' },
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader' }
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader" // compiles Sass to CSS
+        ]
+      },
+      {
+        test: /\.html/,
+        use: ["file-loader"]
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"]
+      },
+      {
+        test: /test\/test\.js?$/,
+        exclude: /node_modules/,
+        use: ["mocha-loader"]
+      }
     ]
   },
   resolve: {
-    modulesDirectories: [
-      "node_modules", "source", "test"
+    modules: [
+      path.resolve(__dirname, "source"),
+      path.resolve(__dirname, "test"),
+      "node_modules"
     ],
     extensions: [
-      "", ".js", ".json", ".jsx", ".min.js"
+      ".js", ".json", ".jsx", ".min.js"
     ]
   }
 };

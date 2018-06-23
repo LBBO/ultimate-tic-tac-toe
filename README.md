@@ -24,13 +24,13 @@ Target design
 Environment
 -----------
 
-* [NodeJS](https://nodejs.org) (Version 5.x)
+* [NodeJS](https://nodejs.org) (Version 10.x)
 
 Setup
 -----
 
-* Fork this project into your github account
-* Clone fork on your machine
+* Fork this project into your GitHub account
+* Clone your fork to your machine
 * In project folder:
   * `npm install`
 
@@ -50,3 +50,4 @@ Technologies used
 * [React](https://facebook.github.io/react/) for web components
 * [Sass](http://sass-lang.com/) for CSS preprocessing
 * [Mocha](http://mochajs.org/) as test runner and [Chai](http://chaijs.com/) as assertion library
+* [Enzyme](http://airbnb.io/enzyme/) as a test renderer for React
