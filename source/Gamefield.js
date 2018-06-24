@@ -60,7 +60,7 @@ export default class Gamefield {
 	init(startingPlayer = this.playerO) {
 		this.currPlayer = startingPlayer;
 		this.field = new Array(this.numberOfRows).fill(0).map(() => new Array(this.numberOfCols).fill(this.nobody));
-		this.movesMade = 0;
+		this.singleFieldsWon = 0;
 		this.isWon = false;
 		this.winner = this.nobody;
 	}
@@ -93,7 +93,7 @@ export default class Gamefield {
 	RowAndColFromTotalIndex(index) {
 		if (typeof index !== 'number') {
 			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof '') + '"');
-		} else if (index < 0 || index >= this.amountOfPossibleMoves) {
+		} else if (index < 0 || index >= this.amountOfSingleGamefields) {
 			throw 'index must be between 0 and 8!';
 		} else {
 			return {
@@ -110,7 +110,7 @@ export default class Gamefield {
 			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
 			result = this.CheckIfMoveIsValid(row, col);
 		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-			result = !this.isWon && this.movesMade < this.amountOfPossibleMoves && this.field[args[0]][args[1]] === this.nobody;
+			result = !this.isWon && this.singleFieldsWon < this.amountOfSingleGamefields && this.field[args[0]][args[1]] === this.nobody;
 		} else {
 			console.warn('Gamefield.CheckIfMoveIsValid called with ' + args.length + ' arguments. Expected either one or' +
 						 ' two numbers.');
@@ -157,7 +157,7 @@ export default class Gamefield {
 			this.winner = this.winnerOfCombo(this.field.map((row, i) => row[this.field.length - 1 - i]));
 		}
 		
-		if (this.winner != this.nobody || this.movesMade >= 9) {
+		if (this.winner != this.nobody || this.singleFieldsWon >= 9) {
 			this.isWon = true;
 		}
 	}
@@ -171,7 +171,7 @@ export default class Gamefield {
 
 			if (this.CheckIfMoveIsValid(row, col)) {
 				this.field[row][col] = this.currPlayer;
-				this.movesMade++;
+				this.singleFieldsWon++;
 				this.currPlayer = this.otherRealPlayer(this.currPlayer);
 				this.checkForWin(row, col);
 			}
@@ -181,7 +181,7 @@ export default class Gamefield {
 		}
 	}
 
-	get amountOfPossibleMoves() {
+	get amountOfSingleGamefields() {
 		return this.numberOfCols * this.numberOfRows;
 	}
 	

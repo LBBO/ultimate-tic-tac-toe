@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import GamefieldComponent from "./GamefieldComponent";
-import Gamefield from "./Gamefield";
+import FieldOfGamefields from './FieldOfGamefields';
+import FieldOfGamefieldsComponent from './FieldOfGamefieldsComponent';
 
 export default class App extends Component {
 	constructor(props) {
@@ -8,7 +8,7 @@ export default class App extends Component {
 
 		this.state = {
 			gameIsRunning: false,
-			gameField: new Gamefield()
+			gameField: new FieldOfGamefields()
 		};
 		
 		this.renderBottom = this.renderBottom.bind(this);
@@ -47,9 +47,9 @@ export default class App extends Component {
 	}
 
 	renderGamefield() {
-		return <GamefieldComponent
+		return <FieldOfGamefieldsComponent
 			onTileClick={this.onTileClick}
-			gameField={this.state.gameField}
+			fieldOfGameFields={this.state.gameField}
 		/>;
 	}
 
