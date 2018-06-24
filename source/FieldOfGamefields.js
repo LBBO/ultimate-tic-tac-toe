@@ -10,10 +10,14 @@ export default class FieldOfGamefields extends Gamefield {
 	init(startingPlayer = this.playerO) {
 		this.currPlayer = startingPlayer;
 		this.field = new Array(this.numberOfRows).fill(0)
-			.map(() => new Array(this.numberOfCols).fill(new SingleGamefield(this)));
+			.map(() => new Array(this.numberOfCols).fill(0).map(() => new SingleGamefield()));
 		this.singleFieldsWon = 0;
 		this.isWon = false;
 		this.winner = this.nobody;
+		this.chooseAny = true;
+		this.activeSingleGamefields = new Array(this.numberOfRows * this.numberOfCols).fill(0)
+			.map((curr, index) => index);
+		console.log(this.activeSingleGamefields);
 	}
 	
 	StartNewGame() {
@@ -31,18 +35,20 @@ export default class FieldOfGamefields extends Gamefield {
 	}
 	
 	/**
-	 *
-	 * @param {SingleGamefield} singleGamefield
 	 * @returns {boolean}
 	 */
-	CheckIfMoveIsValid(singleGamefield) {
+	CheckIfMoveIsValid(gamefieldRow, gamefieldCol) {
 		let result = false;
 		
-		if (singleGamefield instanceof SingleGamefield) {
-			result = !this.isWon && this.singleFieldsWon < this.amountOfSingleGamefields && true;
+		if (typeof gamefieldRow === 'number' && typeof gamefieldCol === 'number') {
+			result =
+				!this.isWon
+				&& this.singleFieldsWon < this.amountOfSingleGamefields
+				&& !this.field[gamefieldRow][gamefieldCol].HasBeenWon
+				&& this.activeSingleGamefields.indexOf(gamefieldRow * this.numberOfRows + gamefieldCol) > -1;
 		} else {
-			console.warn('FieldOfGamefields.CheckIfMoveIsValid called with wrong argument type. Expected' +
-						 ' SingleGamefield! Instead got ', singleGamefield);
+			console.warn('FieldOfGamefields.CheckIfMoveIsValid called with wrong argument types. Expected' +
+						 ' two numbers! Instead got ', gamefieldRow, gamefieldCol);
 		}
 		
 		return result;
@@ -56,21 +62,48 @@ export default class FieldOfGamefields extends Gamefield {
 	}
 	
 	MakeMove(...args) {
-		if (args.length === 1 && typeof args[0] === 'number') {
-			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
-			this.MakeMove(row, col);
-		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-			const [row, col] = args;
-			
-			if (this.CheckIfMoveIsValid(row, col)) {
-				this.field[row][col] = this.currPlayer;
-				this.singleFieldsWon++;
+		if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
+			const rowAndColOfFieldOfGamefields = this.RowAndColFromTotalIndex(args[0]);
+			const rowAndColOfSingleGamefield =
+				this.field[rowAndColOfFieldOfGamefields.row][rowAndColOfFieldOfGamefields.col]
+					.RowAndColFromTotalIndex(args[1]);
+			this.MakeMove(
+				rowAndColOfFieldOfGamefields.row, rowAndColOfFieldOfGamefields.col,
+				rowAndColOfSingleGamefield.row, rowAndColOfSingleGamefield.col
+			);
+		} else if (
+			args.length === 4 && typeof args[0] === 'number' && typeof args[1] === 'number'
+			&& typeof args[2] === 'number' && typeof args[3] === 'number'
+		) {
+			const [singleGamefieldRow, singleGamefieldCol, fieldRow, fieldCol] = args;
+
+			const targetedSingleField = this.field[singleGamefieldRow][singleGamefieldCol];
+			if (this.CheckIfMoveIsValid(singleGamefieldRow, singleGamefieldCol) && targetedSingleField.CheckIfMoveIsValid(fieldRow, fieldCol)) {
+				targetedSingleField.MakeMove(fieldRow, fieldCol, this.currPlayer);
 				this.currPlayer = this.otherRealPlayer(this.currPlayer);
-				this.checkForWin(row, col);
+				this.chooseAny = false;
+
+				if (targetedSingleField.HasBeenWon) {
+					this.singleFieldsWon++;
+					this.checkForWin(singleGamefieldRow, singleGamefieldCol);
+				}
+
+				const nextExpectedField = this.field[fieldRow][fieldCol];
+				if (nextExpectedField.HasBeenWon) {
+					this.activeSingleGamefields = this.FlattenedField.reduce((all, currSingleGamefield, index) => {
+						if (!currSingleGamefield.HasBeenWon) {
+							all.push(index);
+						}
+
+						return all;
+					}, []);
+				} else {
+					this.activeSingleGamefields = [fieldRow * 3 + fieldCol];
+				}
 			}
 		} else {
-			console.warn('Gamefield.MakeMove called with ' + args.length + ' arguments. Expected either one or' +
-						 ' two numbers.');
+			console.warn('Gamefield.MakeMove called with ' + args.length + ' arguments. Expected either two or' +
+						 ' four numbers.');
 		}
 	}
 }

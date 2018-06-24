@@ -93,8 +93,8 @@ export default class Gamefield {
 	RowAndColFromTotalIndex(index) {
 		if (typeof index !== 'number') {
 			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof '') + '"');
-		} else if (index < 0 || index >= this.amountOfSingleGamefields) {
-			throw 'index must be between 0 and 8!';
+		} else if (index < 0 || index > this.amountOfSingleGamefields) {
+			throw 'index must be between 0 and ' + (this.amountOfSingleGamefields - 1) + '!';
 		} else {
 			return {
 				col: index % this.numberOfRows,

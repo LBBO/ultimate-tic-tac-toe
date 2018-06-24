@@ -42,10 +42,9 @@ html, body {
 			width: $gameBoxSize;
 			height: $gameBoxSize;
 			grid-gap: $paddingBetweenHeaderFooterAndGamefield;
+			background-color: $gameBackgroundInactive;
 
 			&.gameIsNotRunning {
-				background-color: $gameBackgroundInactive;
-
 				.header {
 					grid-template-columns: auto;
 					grid-template-rows: auto;
@@ -53,26 +52,28 @@ html, body {
 				}
 
 				.fieldOfGamefields {
-					background-color: $fieldOfGamefieldsBorderColorWhenGameIsNotRunning;
-
 					.singleGamefield {
-						div {
-							border-color: $singleGamefieldBorderColorWhenGameIsNotRunning;
+						.field {
+							div {
+								&.empty {
+									cursor: default;
+								}
 
-							&.empty {
-								cursor: default;
-							}
-
-							svg {
-								display: none;
+								svg {
+									display: none;
+								}
 							}
 						}
+					}
+
+					.winner {
+						display: none;
 					}
 				}
 			}
 
 			&.gameIsRunning {
-				background-color: $gameBackgroundActive;
+				//background-color: $gameBackgroundActive;
 
 				.header {
 					grid-template-columns: 100px auto 100px;
@@ -81,11 +82,33 @@ html, body {
 				}
 
 				.fieldOfGamefields {
-					background-color: $fieldOfGamefieldsBorderColorWhenGameIsRunning;
+					&.chooseAny {
+						background-color: $fieldOfGamefieldsBorderColorWhenGameIsRunning;
+
+						.singleGamefield {
+							.field {
+								background-color: $gameBackgroundActive;
+
+								div {
+									border-color: $singleGamefieldBorderColorWhenGameIsRunning;
+								}
+							}
+						}
+					}
 
 					.singleGamefield {
-						div {
-							border-color: $singleGamefieldBorderColorWhenGameIsRunning;
+						&.active {
+							.field {
+								background-color: $gameBackgroundActive;
+
+								div {
+									border-color: $singleGamefieldBorderColorWhenGameIsRunning;
+
+									&.empty {
+										cursor: pointer;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -177,61 +200,82 @@ html, body {
 				height: $totalGameFieldSize;
 				overflow: hidden;
 				grid-gap: $borderWidth;
-				//background-color: $fieldOfGamefieldsBorderColorWhenGameIsNotRunning;
+				background-color: $fieldOfGamefieldsBorderColorWhenGameIsNotRunning;
 
 				&.hide {
 					display: none;
 				}
 
 				.singleGamefield {
-					display: grid;
-					grid-template-columns: 1fr 1fr 1fr;
-					grid-template-rows: 1fr 1fr 1fr;
-					place-items: center;
-					width: $singleGameFieldSize;
-					height: $singleGameFieldSize;
-					overflow: hidden;
-					grid-gap: $borderWidth;
-					padding: $paddingAroundSingleGamefield;
-					background-color: $gameBackgroundInactive;
+					width: $singleGameFieldSize + $paddingAroundSingleGamefield * 2;
+					height: $singleGameFieldSize + $paddingAroundSingleGamefield * 2;
 
-					&.hide {
-						display: none;
-						color: #000000;
+					.field {
+						width: $singleGameFieldSize;
+						height: $singleGameFieldSize;
+						position: relative;
+						display: grid;
+						grid-template-columns: 1fr 1fr 1fr;
+						grid-template-rows: 1fr 1fr 1fr;
+						place-items: center;
+						overflow: hidden;
+						grid-gap: $borderWidth;
+						padding: $paddingAroundSingleGamefield;
+						background-color: $gameBackgroundInactive;
+
+						&.hide {
+							display: none;
+							color: #000000;
+						}
+
+						div {
+							border: $borderWidth solid $singleGamefieldBorderColorWhenGameIsNotRunning;
+							width: 100%;
+							height: 100%;
+							display: grid;
+							place-items: center;
+							font-weight: 900;
+							font-size: 4em;
+							//border-color: $singleGamefieldBorderColorWhenGameIsNotRunning;
+
+							&:nth-child(3n) {
+								border-right: none;
+							}
+
+							&:nth-child(3n - 2) {
+								border-left: none;
+							}
+
+							&:nth-last-child(-n + 3) {
+								border-bottom: none;
+							}
+
+							&:nth-child(-n + 3) {
+								border-top: none;
+							}
+
+							svg {
+								width: 70%;
+								height: auto;
+							}
+						}
 					}
 
-					div {
-						border: $borderWidth solid rgba(0, 0, 0, 0);
-						width: 100%;
-						height: 100%;
-						display: grid;
-						place-items: center;
-						font-weight: 900;
-						font-size: 4em;
+					&.hasBeenWon {
+						.winner {
+							position: relative;
+							top: -($singleGameFieldSize + $paddingAroundSingleGamefield * 2);
+							z-index: 2;
+							opacity: 0.7;
+							padding: $paddingAroundSingleGamefield;
 
-						&.empty {
-							cursor: pointer;
-						}
+							&.O {
+								background-color: rgba(115, 220, 230, 0.25);
+							}
 
-						&:nth-child(3n) {
-							border-right: none;
-						}
-
-						&:nth-child(3n - 2) {
-							border-left: none;
-						}
-
-						&:nth-last-child(-n + 3) {
-							border-bottom: none;
-						}
-
-						&:nth-child(-n + 3) {
-							border-top: none;
-						}
-
-						svg {
-							width: 70%;
-							height: auto;
+							&.X {
+								background-color: rgba(58, 59, 99, 0.25);
+							}
 						}
 					}
 				}

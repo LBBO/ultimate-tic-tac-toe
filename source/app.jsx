@@ -32,9 +32,9 @@ export default class App extends Component {
 		this.forceRender();
 	}
 
-	onTileClick(index) {
+	onTileClick(singleGamefieldIndex, tileIndex) {
 		if (this.state.gameIsRunning) {
-			this.state.gameField.MakeMove(index);
+			this.state.gameField.MakeMove(singleGamefieldIndex, tileIndex);
 			if (this.state.gameField.HasBeenWon) {
 				this.stopGame();
 			}
