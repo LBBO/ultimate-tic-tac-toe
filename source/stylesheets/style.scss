@@ -1,8 +1,29 @@
+//general colors
+$custom-dark-gray: #6C6C73;
+$customWhiteBackground: #F8F8F8;
+$abortTextColor: #E390C3;
+$winScreenTextColor: #A6A6AE;
+$newGameBackgroundcolor: #21C3A8;
+$footerTextColor: #9C9CAC;
+
+//colors when game is running
+$gameBackgroundActive: #8A85BD;
+$borderColorWhenGameIsRunning: #746FA7;
+
+//colors when game is NOT running
+$gameBackgroundInactive: #ECECEE;
+$borderColorWhenGameIsNotRunning: #E7E7EA;
+
+$gameBoxSize: 500px;
+$headerAndFooterHeight: 70px;
+$paddingBetweenHeaderFooterAndGamefield: 20px;
+$totalGameFieldSize: $gameBoxSize - 2*$headerAndFooterHeight - 2*$paddingBetweenHeaderFooterAndGamefield;
+
 html, body {
 	font-family: "Segoe UI", "Letter Gothic Std", Arial, sans-serif;
 	padding: 0;
 	margin: 0;
-	background-color: #6C6C73;
+	background-color: $custom-dark-gray;
 
 	#app {
 		display: grid;
@@ -13,12 +34,12 @@ html, body {
 		> div {
 			display: grid;
 			place-items: center;
-			width: 500px;
-			height: 500px;
-			grid-gap: 20px;
+			width: $gameBoxSize;
+			height: $gameBoxSize;
+			grid-gap: $paddingBetweenHeaderFooterAndGamefield;
 
 			&.gameIsNotRunning {
-				background-color: #ECECEE;
+				background-color: $gameBackgroundInactive;
 
 				.header {
 					grid-template-columns: auto;
@@ -28,14 +49,22 @@ html, body {
 
 				.wrapper {
 					div {
-						border-right-color: #E7E7EA;
-						border-bottom-color: #E7E7EA;
+						border-right-color: $borderColorWhenGameIsNotRunning;
+						border-bottom-color: $borderColorWhenGameIsNotRunning;
+
+						&.empty {
+							cursor: default;
+						}
+
+						svg {
+							display: none;
+						}
 					}
 				}
 			}
 
 			&.gameIsRunning {
-				background-color: #8A85BD;
+				background-color: $gameBackgroundActive;
 
 				.header {
 					grid-template-columns: 100px auto 100px;
@@ -45,15 +74,15 @@ html, body {
 
 				.wrapper {
 					div {
-						border-right-color: #746FA7;
-						border-bottom-color: #746FA7;
+						border-right-color: $borderColorWhenGameIsRunning;
+						border-bottom-color: $borderColorWhenGameIsRunning;
 					}
 				}
 			}
 
 			.header, .footer {
-				height: 70px;
-				background-color: #F8F8F8;
+				height: $headerAndFooterHeight;
+				background-color: $customWhiteBackground;
 				width: 100%;
 			}
 
@@ -62,27 +91,27 @@ html, body {
 				place-items: center;
 
 				.title {
-					color: #6C6C73;
+					color: $custom-dark-gray;
 					font-size: 2.6em;
 					grid-area: title;
 				}
 
 				.abort {
 					grid-area: abort;
-					color: #E390C3;
+					color: $abortTextColor;
 					text-decoration: underline;
 					cursor: pointer;
 				}
 			}
 
 			.footer {
-				color: #9C9CAC;
+				color: $footerTextColor;
 				font-size: 1.4em;
 				display: grid;
 				place-items: center;
 
 				.newGame {
-					background-color: #21C3A8;
+					background-color: $newGameBackgroundcolor;
 					color: white;
 					padding: 7px 50px;
 					border-radius: 50px;
@@ -109,10 +138,10 @@ html, body {
 				grid-template-rows: auto min-content auto;
 				justify-items: center;
 				width: 100%;
-				height: 340px;
+				height: $totalGameFieldSize;
 				grid-gap: 10px;
 				font-size: 2.3em;
-				color: #A6A6AE;
+				color: $winScreenTextColor;
 
 				.winner {
 					grid-area: winner;
@@ -133,8 +162,8 @@ html, body {
 				grid-template-columns: 1fr 1fr 1fr;
 				grid-template-rows: 1fr 1fr 1fr;
 				place-items: center;
-				width: 340px;
-				height: 340px;
+				width: $totalGameFieldSize;
+				height: $totalGameFieldSize;
 				overflow: hidden;
 				grid-gap: 5px;
 
@@ -150,11 +179,6 @@ html, body {
 					place-content: center;
 					font-weight: 900;
 					font-size: 4em;
-
-					svg {
-						width: 70px;
-						height: 70px;
-					}
 
 					&.empty {
 						cursor: pointer;
@@ -174,6 +198,11 @@ html, body {
 
 					&:nth-child(-n + 3) {
 						border-top: none;
+					}
+
+					svg {
+						width: 70px;
+						height: 70px;
 					}
 				}
 			}

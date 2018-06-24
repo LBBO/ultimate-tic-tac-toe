@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import Gamefield from "./Gamefield.jsx";
+import React, {Component} from "react";
+import GamefieldComponent from "./GamefieldComponent";
+import Gamefield from "./Gamefield";
 
 export default class App extends Component {
 	constructor(props) {
@@ -7,24 +8,56 @@ export default class App extends Component {
 
 		this.state = {
 			gameIsRunning: false,
-			gameField: null
+			gameField: new Gamefield()
 		};
-
-		this.beginningPlayer = undefined;
-
+		
 		this.renderBottom = this.renderBottom.bind(this);
 		this.renderTitle = this.renderTitle.bind(this);
-		this.abort = this.abort.bind(this);
+		this.renderGamefield = this.renderGamefield.bind(this);
+		this.renderWinScreen = this.renderWinScreen.bind(this);
+		this.stopGame = this.stopGame.bind(this);
 		this.startGame = this.startGame.bind(this);
 		this.forceRender = this.forceRender.bind(this);
-		this.win = this.win.bind(this);
+		this.onTileClick = this.onTileClick.bind(this);
 	}
-	
+
+	startGame() {
+		this.state.gameField.StartNewGame();
+		this.state.gameIsRunning = true;
+		this.forceRender();
+	}
+
+	stopGame() {
+		this.state.gameIsRunning = false;
+		this.forceRender();
+	}
+
+	onTileClick(index) {
+		if (this.state.gameIsRunning) {
+			this.state.gameField.MakeMove(index);
+			if (this.state.gameField.HasBeenWon) {
+				this.stopGame();
+			}
+			this.forceRender();
+		}
+	}
+
+	forceRender() {
+		this.setState(this.state);
+	}
+
+	renderGamefield() {
+		return <GamefieldComponent
+			onTileClick={this.onTileClick}
+			gameField={this.state.gameField}
+		/>;
+	}
+
 	renderTitle() {
 		return (
 			<div className="header">
 				<span className="title">TICK TACK</span>
-				{this.state.gameIsRunning ? <span className="abort" onClick={this.abort}>ABORT</span> : null}
+				{this.state.gameIsRunning ? <span className="abort" onClick={this.stopGame}>ABORT</span> : null}
 			</div>
 		);
 	}
@@ -39,69 +72,31 @@ export default class App extends Component {
 		} else {
 			return (
 				<div className="footer">
-					<span className="userTurn">{this.state.gameField.state.currentPlayer.svg}s TURN</span>
+					<span className="userTurn">{this.state.gameField.CurrentPlayer.svg}s TURN</span>
 				</div>
 			);
 		}
 	}
-	
-	abort() {
-		this.state.gameIsRunning = false;
-		this.state.gameField.init(this.beginningPlayer);
-		this.forceRender();
-	}
-	
-	startGame() {
-		this.state.gameIsRunning = true;
-		this.state.gameField.init(this.beginningPlayer);
-		this.state.gameField.start();
-		this.forceRender();
-	}
 
-	forceRender() {
-		this.setState(this.state);
-	}
-
-	win() {
-		this.state.gameIsRunning = false;
-
-		//Verlierer soll anfangen, bei Unentschieden derjenige, der diese Runde nicht begonnen hat
-		switch(this.state.gameField.state.winner.name) {
-			case 'X':
-				this.beginningPlayer = this.state.gameField.playerO;
-				break;
-			case 'O':
-				this.beginningPlayer = this.state.gameField.playerX;
-				break;
-			default:
-				this.beginningPlayer = this.state.gameField.state.currentPlayer;
-				break;
-		}
-
-		this.forceRender();
+	renderWinScreen() {
+		return this.state.gameField.HasBeenWon ?
+			<div className="winScreen">
+						<span className="winner">{
+							this.state.gameField.Winner.svg === null
+								? 'NOBODY'
+								: this.state.gameField.Winner.svg
+						}</span>
+				<aside>WON THE GAME</aside>
+			</div>
+			: null;
 	}
 
 	render() {
 		return (
 			<div className={'game ' + (this.state.gameIsRunning ? 'gameIsRunning' : 'gameIsNotRunning')}>
 				{this.renderTitle()}
-				{(this && this.state.gameField && this.state.gameField.state.isWon) ?
-					<div className="winScreen">
-						<span className="winner">{
-							this.state.gameField.state.winner.svg == '' ? 'NOBODY' : this.state.gameField.state.winner.svg
-						}</span>
-						<aside>WON THE GAME</aside>
-					</div>
-					:null
-				}
-				
-				<Gamefield
-					ref={(gameField) => {this.state.gameField = gameField;}}
-					onTileClick={this.forceRender}
-					onWin={this.win}
-				>
-
-				</Gamefield>
+				{this.renderWinScreen()}
+				{this.renderGamefield()}
 				{this.renderBottom()}
 			</div>
 		);
