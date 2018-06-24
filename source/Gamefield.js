@@ -137,6 +137,7 @@ export default class Gamefield {
 	}
 
 	checkForWin(changedRowIndex, changedColIndex) {
+		//debugger;
 		//check changed row
 		this.winner = this.winnerOfCombo(this.field[changedRowIndex]);
 		
@@ -156,8 +157,10 @@ export default class Gamefield {
 		if (this.winner === this.nobody && changedColIndex === this.field.length - 1 - changedRowIndex) {
 			this.winner = this.winnerOfCombo(this.field.map((row, i) => row[this.field.length - 1 - i]));
 		}
-		
-		if (this.winner != this.nobody || this.singleFieldsWon >= 9) {
+
+		console.log(this.winner);
+
+		if (this.winner != this.nobody || this.singleFieldsWon >= this.numberOfRows * this.numberOfCols) {
 			this.isWon = true;
 		}
 	}

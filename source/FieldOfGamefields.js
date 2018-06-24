@@ -17,7 +17,6 @@ export default class FieldOfGamefields extends Gamefield {
 		this.chooseAny = true;
 		this.activeSingleGamefields = new Array(this.numberOfRows * this.numberOfCols).fill(0)
 			.map((curr, index) => index);
-		console.log(this.activeSingleGamefields);
 	}
 	
 	StartNewGame() {
@@ -55,10 +54,11 @@ export default class FieldOfGamefields extends Gamefield {
 	}
 	
 	winnerOfCombo(combo) {
+		console.log(combo);
 		return combo.reduce(
 			(currWinner, currSingleGamefield) =>
 				currSingleGamefield.Winner === currWinner ? currWinner : this.nobody
-		);
+		, combo[0].Winner);
 	}
 	
 	MakeMove(...args) {
