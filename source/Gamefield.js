@@ -47,32 +47,23 @@ export default class Gamefield {
 	constructor() {
 		this.numberOfRows = 3;
 		this.numberOfCols = 3;
-
+		
 		this.nobody = new Player('empty', null);
 		this.playerX = new Player('X', playerX_SVG);
 		this.playerO = new Player('O', playerO_SVG);
 		
 		this.hasEverBeenStarted = false;
-
+		
 		this.init();
 	}
-
+	
 	init(startingPlayer = this.playerO) {
-		this.currPlayer = startingPlayer;
-		this.field = new Array(this.numberOfRows).fill(0).map(() => new Array(this.numberOfCols).fill(this.nobody));
-		this.singleFieldsWon = 0;
 		this.isWon = false;
 		this.winner = this.nobody;
 	}
 	
-	StartNewGame() {
-		if (this.hasEverBeenStarted) {
-			this.Restart();
-		} else {
-			this.init();
-		}
-		
-		this.hasEverBeenStarted = true;
+	Restart() {
+		this.init(this.computeNextStartingPlayerAfterGameEnd());
 	}
 	
 	computeNextStartingPlayerAfterGameEnd() {
@@ -86,14 +77,20 @@ export default class Gamefield {
 		}
 	}
 	
-	Restart() {
-		this.init(this.computeNextStartingPlayerAfterGameEnd());
+	StartNewGame() {
+		if (this.hasEverBeenStarted) {
+			this.Restart();
+		} else {
+			this.init();
+		}
+		
+		this.hasEverBeenStarted = true;
 	}
-
+	
 	RowAndColFromTotalIndex(index) {
 		if (typeof index !== 'number') {
-			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof '') + '"');
-		} else if (index < 0 || index > this.amountOfSingleGamefields) {
+			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof index) + '"');
+		} else if (index < 0 || index >= this.amountOfSingleGamefields) {
 			throw 'index must be between 0 and ' + (this.amountOfSingleGamefields - 1) + '!';
 		} else {
 			return {
@@ -102,42 +99,40 @@ export default class Gamefield {
 			};
 		}
 	}
-
-	CheckIfMoveIsValid(...args) {
-		let result = false;
-
-		if (args.length === 1 && typeof args[0] === 'number') {
-			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
-			result = this.CheckIfMoveIsValid(row, col);
-		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-			result = !this.isWon && this.singleFieldsWon < this.amountOfSingleGamefields && this.field[args[0]][args[1]] === this.nobody;
+	
+	/**
+	 * Calculates TotalIndex when given a certain row and col
+	 * @param {Number} row
+	 * @param {Number} col
+	 * @returns {number}
+	 */
+	TotalIndexFromRowAndCol(row, col) {
+		if (typeof row !== 'number' || typeof col !== 'number') {
+			throw new TypeError('Expected row and col to have type of "number". Instead, they hat types of "'
+				+ (typeof row) + ' and ' + (typeof col) + '"');
+		} else if (row < 0 || row >= this.numberOfRows) {
+			throw 'row must be between 0 and ' + (this.numberOfRows - 1) + '!';
+		} else if (col < 0 || col >= this.numberOfCols) {
+			throw 'col must be between 0 and ' + (this.numberOfCols - 1) + '!';
 		} else {
-			console.warn('Gamefield.CheckIfMoveIsValid called with ' + args.length + ' arguments. Expected either one or' +
-						 ' two numbers.');
+			return row * this.numberOfRows + col;
 		}
-
-		return result;
 	}
 	
-	winnerOfCombo(combo) {
-		return combo.reduce((currWinner, currPlayer) => currPlayer === currWinner ? currWinner : this.nobody);
-	}
-
 	otherRealPlayer(player) {
 		let result;
-
+		
 		if (player !== this.playerX && player !== this.playerO) {
 			console.warn('Gamefield.otherRealPlayer was called with non-player: ', player);
 			result = this.playerX;
 		} else {
 			result = player === this.playerX ? this.playerO : this.playerX;
 		}
-
+		
 		return result;
 	}
-
+	
 	checkForWin(changedRowIndex, changedColIndex) {
-		//debugger;
 		//check changed row
 		this.winner = this.winnerOfCombo(this.field[changedRowIndex]);
 		
@@ -157,33 +152,12 @@ export default class Gamefield {
 		if (this.winner === this.nobody && changedColIndex === this.field.length - 1 - changedRowIndex) {
 			this.winner = this.winnerOfCombo(this.field.map((row, i) => row[this.field.length - 1 - i]));
 		}
-
-		console.log(this.winner);
-
-		if (this.winner != this.nobody || this.singleFieldsWon >= this.numberOfRows * this.numberOfCols) {
+		
+		if (this.winner != this.nobody || this.singleFieldsWon >= this.amountOfSingleGamefields) {
 			this.isWon = true;
 		}
 	}
-
-	MakeMove(...args) {
-		if (args.length === 1 && typeof args[0] === 'number') {
-			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
-			this.MakeMove(row, col);
-		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-			const [row, col] = args;
-
-			if (this.CheckIfMoveIsValid(row, col)) {
-				this.field[row][col] = this.currPlayer;
-				this.singleFieldsWon++;
-				this.currPlayer = this.otherRealPlayer(this.currPlayer);
-				this.checkForWin(row, col);
-			}
-		} else {
-			console.warn('Gamefield.MakeMove called with ' + args.length + ' arguments. Expected either one or' +
-						 ' two numbers.');
-		}
-	}
-
+	
 	get amountOfSingleGamefields() {
 		return this.numberOfCols * this.numberOfRows;
 	}
@@ -199,7 +173,7 @@ export default class Gamefield {
 	get CurrentPlayer() {
 		return this.currPlayer;
 	}
-
+	
 	get HasBeenWon() {
 		return this.isWon;
 	}

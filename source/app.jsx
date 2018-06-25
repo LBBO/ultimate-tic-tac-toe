@@ -35,7 +35,6 @@ export default class App extends Component {
 	onTileClick(singleGamefieldIndex, tileIndex) {
 		if (this.state.gameIsRunning) {
 			this.state.gameField.MakeMove(singleGamefieldIndex, tileIndex);
-			console.log(this.state.gameField.HasBeenWon);
 			if (this.state.gameField.HasBeenWon) {
 				this.stopGame();
 			}

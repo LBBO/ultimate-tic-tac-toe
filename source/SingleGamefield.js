@@ -7,26 +7,9 @@ export default class SingleGamefield extends Gamefield {
 		this.init();
 	}
 	
-	init(startingPlayer = this.playerO) {
-		this.currPlayer = startingPlayer;
+	init() {
 		this.field = new Array(this.numberOfRows).fill(0).map(() => new Array(this.numberOfCols).fill(this.nobody));
 		this.movesMade = 0;
-		this.isWon = false;
-		this.winner = this.nobody;
-	}
-	
-	StartNewGame() {
-		if (this.hasEverBeenStarted) {
-			this.Restart();
-		} else {
-			this.init();
-		}
-		
-		this.hasEverBeenStarted = true;
-	}
-	
-	Restart() {
-		this.init(this.computeNextStartingPlayerAfterGameEnd());
 	}
 	
 	/**
@@ -39,10 +22,15 @@ export default class SingleGamefield extends Gamefield {
 			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
 			result = this.CheckIfMoveIsValid(row, col);
 		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-			result = !this.isWon && this.movesMade < this.amountOfSingleGamefields && this.field[args[0]][args[1]] === this.nobody;
+			result =
+				!this.isWon &&
+				this.movesMade < this.amountOfSingleGamefields &&
+				args[0] >= 0 && args[0] < this.numberOfRows &&
+				args[1] >= 0 && args[1] < this.numberOfCols &&
+				this.field[args[0]][args[1]] === this.nobody;
 		} else {
 			console.warn('Gamefield.CheckIfMoveIsValid called with ' + args.length + ' arguments. Expected either one or' +
-						 ' two numbers.');
+						 ' two numbers, actual:', args);
 		}
 
 		return result;
