@@ -3,12 +3,12 @@ import Player from './Player'
 
 const playerX_SVG = React.createElement(
 	"svg",
-	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1"},
+	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", 'class': 'playerX'},
 	React.createElement("line", {
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			"stroke": "#3a3b63",
+			//"stroke": "#3a3b63",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
@@ -19,7 +19,7 @@ const playerX_SVG = React.createElement(
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			"stroke": "#3a3b63",
+			//"stroke": "#3a3b63",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
@@ -29,12 +29,12 @@ const playerX_SVG = React.createElement(
 );
 const playerO_SVG = React.createElement(
 	"svg",
-	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1"},
+	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", 'class': 'playerO'},
 	React.createElement("circle", {
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			"stroke": "#73dce6",
+			//"stroke": "#73dce6",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
