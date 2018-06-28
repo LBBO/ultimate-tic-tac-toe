@@ -7,11 +7,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, "release"),
-    publicPath: "/",
     filename: "[name].js"
-  },
-  devServer: {
-    contentBase: path.join(__dirname, "release")
   },
   module: {
     rules: [
@@ -24,8 +20,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.html/,
-        use: ["file-loader"]
+        test: /\.html$/,
+        use: [{
+          loader: "file-loader",
+          options: {
+            name: "[name].[ext]"
+          }
+        }]
       },
       {
         test: /\.jsx?$/,
@@ -33,7 +34,7 @@ module.exports = {
         use: ["babel-loader"]
       },
       {
-        test: /test\/test\.js?$/,
+        test: /test\.js$/,
         exclude: /node_modules/,
         use: ["mocha-loader"]
       }
@@ -48,5 +49,8 @@ module.exports = {
     extensions: [
       ".js", ".json", ".jsx", ".min.js"
     ]
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "release")
   }
 };
