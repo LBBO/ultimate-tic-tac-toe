@@ -8,8 +8,8 @@ export default class SingleGamefield extends Gamefield {
 	}
 	
 	init() {
+		super.init();
 		this.field = new Array(this.numberOfRows).fill(0).map(() => new Array(this.numberOfCols).fill(this.nobody));
-		this.movesMade = 0;
 	}
 	
 	/**
@@ -24,7 +24,7 @@ export default class SingleGamefield extends Gamefield {
 		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
 			result =
 				!this.isWon &&
-				this.movesMade < this.amountOfSingleGamefields &&
+				this.occupiedFields < this.fieldLength &&
 				args[0] >= 0 && args[0] < this.numberOfRows &&
 				args[1] >= 0 && args[1] < this.numberOfCols &&
 				this.field[args[0]][args[1]] === this.nobody;
@@ -44,7 +44,7 @@ export default class SingleGamefield extends Gamefield {
 		if (typeof row === 'number' && typeof col === 'number' && player instanceof Player) {
 			if (this.CheckIfMoveIsValid(row, col)) {
 				this.field[row][col] = player;
-				this.movesMade++;
+				this.occupiedFields++;
 				this.checkForWin(row, col);
 			}
 		} else {

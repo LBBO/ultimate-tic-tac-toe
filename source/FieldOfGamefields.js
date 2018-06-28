@@ -8,14 +8,14 @@ export default class FieldOfGamefields extends Gamefield {
 	}
 	
 	init(startingPlayer = this.playerO) {
+		super.init();
 		this.currPlayer = startingPlayer;
 		this.field = new Array(this.numberOfRows).fill(0)
 			.map(() => new Array(this.numberOfCols).fill(0).map(() => new SingleGamefield()));
-		this.singleFieldsWon = 0;
 		this.isWon = false;
 		this.winner = this.nobody;
 		this.chooseAny = true;
-		this.activeSingleGamefields = new Array(this.amountOfSingleGamefields).fill(0)
+		this.activeSingleGamefields = new Array(this.fieldLength).fill(0)
 			.map((curr, index) => index);
 	}
 	
@@ -28,7 +28,7 @@ export default class FieldOfGamefields extends Gamefield {
 		if (typeof gamefieldRow === 'number' && typeof gamefieldCol === 'number') {
 			result =
 				!this.isWon
-				&& this.singleFieldsWon < this.amountOfSingleGamefields
+				&& this.occupiedFields < this.fieldLength
 				&& !this.field[gamefieldRow][gamefieldCol].HasBeenWon
 				&& this.activeSingleGamefields.indexOf(this.TotalIndexFromRowAndCol(gamefieldRow, gamefieldCol)) > -1;
 		} else {
@@ -78,7 +78,7 @@ export default class FieldOfGamefields extends Gamefield {
 				this.chooseAny = false;
 
 				if (targetedSingleField.HasBeenWon) {
-					this.singleFieldsWon++;
+					this.occupiedFields++;
 					this.checkForWin(singleGamefieldRow, singleGamefieldCol);
 				}
 

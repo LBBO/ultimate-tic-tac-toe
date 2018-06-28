@@ -3,12 +3,11 @@ import Player from './Player'
 
 const playerX_SVG = React.createElement(
 	"svg",
-	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", 'class': 'playerX'},
+	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", className: 'playerX'},
 	React.createElement("line", {
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			//"stroke": "#3a3b63",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
@@ -19,7 +18,6 @@ const playerX_SVG = React.createElement(
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			//"stroke": "#3a3b63",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
@@ -29,12 +27,11 @@ const playerX_SVG = React.createElement(
 );
 const playerO_SVG = React.createElement(
 	"svg",
-	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", 'class': 'playerO'},
+	{xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 100", version: "1.1", className: 'playerO'},
 	React.createElement("circle", {
 		style: {
 			"fill": "none",
 			"fillOpacity": "0",
-			//"stroke": "#73dce6",
 			"strokeWidth": "10",
 			"strokeMiterlimit": "4",
 			"strokeDasharray": "none",
@@ -56,10 +53,11 @@ export default class Gamefield {
 		
 		this.init();
 	}
-	
+
 	init(startingPlayer = this.playerO) {
 		this.isWon = false;
 		this.winner = this.nobody;
+		this.occupiedFields = 0;
 	}
 	
 	Restart() {
@@ -90,8 +88,8 @@ export default class Gamefield {
 	RowAndColFromTotalIndex(index) {
 		if (typeof index !== 'number') {
 			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof index) + '"');
-		} else if (index < 0 || index >= this.amountOfSingleGamefields) {
-			throw 'index must be between 0 and ' + (this.amountOfSingleGamefields - 1) + '!';
+		} else if (index < 0 || index >= this.fieldLength) {
+			throw 'index must be between 0 and ' + (this.fieldLength - 1) + '!';
 		} else {
 			return {
 				col: index % this.numberOfRows,
@@ -153,12 +151,12 @@ export default class Gamefield {
 			this.winner = this.winnerOfCombo(this.field.map((row, i) => row[this.field.length - 1 - i]));
 		}
 		
-		if (this.winner != this.nobody || this.singleFieldsWon >= this.amountOfSingleGamefields) {
+		if (this.winner != this.nobody || this.occupiedFields >= this.fieldLength) {
 			this.isWon = true;
 		}
 	}
 	
-	get amountOfSingleGamefields() {
+	get fieldLength() {
 		return this.numberOfCols * this.numberOfRows;
 	}
 	

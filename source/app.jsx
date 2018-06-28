@@ -56,7 +56,7 @@ export default class App extends Component {
 	renderTitle() {
 		return (
 			<div className="header">
-				<span className="title">TICK TACK</span>
+				<span className="title">ULTIMATE TIC TAC TOE</span>
 				{this.state.gameIsRunning ? <span className="abort" onClick={this.stopGame}>ABORT</span> : null}
 			</div>
 		);

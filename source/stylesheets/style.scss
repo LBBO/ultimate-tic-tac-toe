@@ -287,11 +287,17 @@ html, body {
 							padding: $paddingAroundSingleGamefield;
 
 							&.O {
-								background-color: rgba(115, 220, 230, 0.25);
+								background-color: rgba(115, 220, 230, 0.5);
 							}
 
 							&.X {
-								background-color: rgba(58, 59, 99, 0.25);
+								background-color: rgba(58, 59, 99, 0.5);
+							}
+
+							&.empty {
+								height: 100%;
+								width: 100%;
+								background-color: rgba(200, 200, 200, 0.5);
 							}
 						}
 					}
