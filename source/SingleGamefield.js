@@ -4,7 +4,6 @@ import Player from './Player';
 export default class SingleGamefield extends Gamefield {
 	constructor() {
 		super();
-		this.init();
 	}
 	
 	init() {
