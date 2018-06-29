@@ -71,6 +71,8 @@ export default class Gamefield {
 		} else if (this.currPlayer === this.playerO || this.currPlayer === this.playerX) {
 			return this.currPlayer;
 		} else {
+			console.warn('Something went wrong, currPlayer is neither playerX nor playerO. Returning playerX as' +
+						 ' default');
 			return this.playerX;
 		}
 	}
@@ -88,11 +90,13 @@ export default class Gamefield {
 	RowAndColFromTotalIndex(index) {
 		if (typeof index !== 'number') {
 			throw new TypeError('Expected index to have type of "number". Instead, it hat type of "' + (typeof index) + '"');
+		} else if (Number.isNaN(index)) {
+			throw 'Index may not be NaN';
 		} else if (index < 0 || index >= this.fieldLength) {
-			throw 'index must be between 0 and ' + (this.fieldLength - 1) + '!';
+			throw 'Index must be between 0 and ' + (this.fieldLength - 1);
 		} else {
 			return {
-				col: index % this.numberOfRows,
+				col: index % this.numberOfCols,
 				row: Math.floor(index / this.numberOfCols)
 			};
 		}
@@ -107,13 +111,17 @@ export default class Gamefield {
 	TotalIndexFromRowAndCol(row, col) {
 		if (typeof row !== 'number' || typeof col !== 'number') {
 			throw new TypeError('Expected row and col to have type of "number". Instead, they hat types of "'
-				+ (typeof row) + ' and ' + (typeof col) + '"');
+				+ (typeof row) + '" and "' + (typeof col) + '"');
 		} else if (row < 0 || row >= this.numberOfRows) {
-			throw 'row must be between 0 and ' + (this.numberOfRows - 1) + '!';
+			throw 'Row must be between 0 and ' + (this.numberOfRows - 1) + '!';
 		} else if (col < 0 || col >= this.numberOfCols) {
-			throw 'col must be between 0 and ' + (this.numberOfCols - 1) + '!';
+			throw 'Col must be between 0 and ' + (this.numberOfCols - 1) + '!';
+		} else if (Number.isNaN(row)) {
+			throw 'Row may not be NaN';
+		} else if (Number.isNaN(col)) {
+			throw 'Col may not be NaN';
 		} else {
-			return row * this.numberOfRows + col;
+			return row * this.numberOfCols + col;
 		}
 	}
 	
@@ -161,7 +169,7 @@ export default class Gamefield {
 	}
 	
 	get FlattenedField() {
-		return this.field.reduce((acc, row) => acc.concat(row));
+		return this.field.reduce((acc, row) => acc.concat(row), []);
 	}
 	
 	get Winner() {
