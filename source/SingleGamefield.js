@@ -17,10 +17,13 @@ export default class SingleGamefield extends Gamefield {
 	CheckIfMoveIsValid(...args) {
 		let result = false;
 		
-		if (args.length === 1 && typeof args[0] === 'number') {
+		if (args.length === 1 && typeof args[0] === 'number' && !Number.isNaN(args[0])) {
 			const {row, col} = this.RowAndColFromTotalIndex(args[0]);
 			result = this.CheckIfMoveIsValid(row, col);
-		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
+		} else if (
+			args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number' && !Number.isNaN(args[0])
+			&& !Number.isNaN(args[1])
+		) {
 			result =
 				!this.isWon &&
 				args[0] >= 0 && args[0] < this.numberOfRows &&
@@ -30,7 +33,7 @@ export default class SingleGamefield extends Gamefield {
 			console.warn('Gamefield.CheckIfMoveIsValid called with ' + args.length + ' arguments. Expected either one or' +
 						 ' two numbers, actual:', args);
 		}
-
+		
 		return result;
 	}
 	
@@ -39,15 +42,10 @@ export default class SingleGamefield extends Gamefield {
 	}
 	
 	MakeMove(row, col, player) {
-		if (typeof row === 'number' && typeof col === 'number' && player instanceof Player) {
-			if (this.CheckIfMoveIsValid(row, col)) {
-				this.field[row][col] = player;
-				this.occupiedFields++;
-				this.checkForWin(row, col);
-			}
-		} else {
-			console.warn('Gamefield.MakeMove called with ' + args.length + ' arguments. Expected either one or' +
-						 ' two numbers.');
+		if (this.CheckIfMoveIsValid(row, col)) {
+			this.field[row][col] = player;
+			this.occupiedFields++;
+			this.checkForWin(row, col);
 		}
 	}
 }
