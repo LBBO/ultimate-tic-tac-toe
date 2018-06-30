@@ -23,7 +23,6 @@ export default class SingleGamefield extends Gamefield {
 		} else if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
 			result =
 				!this.isWon &&
-				this.occupiedFields < this.fieldLength &&
 				args[0] >= 0 && args[0] < this.numberOfRows &&
 				args[1] >= 0 && args[1] < this.numberOfCols &&
 				this.field[args[0]][args[1]] === this.nobody;
