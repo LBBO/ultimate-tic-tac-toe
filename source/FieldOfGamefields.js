@@ -25,9 +25,11 @@ export default class FieldOfGamefields extends Gamefield {
 	CheckIfMoveIsValid(gamefieldRow, gamefieldCol) {
 		let result = false;
 		
-		if (typeof gamefieldRow === 'number' && typeof gamefieldCol === 'number') {
+		if (typeof gamefieldRow === 'number' && typeof gamefieldCol === 'number' && !Number.isNaN(gamefieldRow) && !Number.isNaN(gamefieldCol)) {
 			result =
 				!this.isWon
+				&& gamefieldRow >= 0 && gamefieldCol >= 0
+				&& gamefieldRow < this.numberOfRows && gamefieldCol < this.numberOfCols
 				&& this.occupiedFields < this.fieldLength
 				&& !this.field[gamefieldRow][gamefieldCol].HasBeenWon
 				&& this.activeSingleGamefields.indexOf(this.TotalIndexFromRowAndCol(gamefieldRow, gamefieldCol)) > -1;
@@ -65,6 +67,7 @@ export default class FieldOfGamefields extends Gamefield {
 		} else if (
 			args.length === 4 && typeof args[0] === 'number' && typeof args[1] === 'number'
 			&& typeof args[2] === 'number' && typeof args[3] === 'number'
+			&& !Number.isNaN(args[0]) && !Number.isNaN(args[1]) && !Number.isNaN(args[2]) && !Number.isNaN(args[3])
 		) {
 			const [singleGamefieldRow, singleGamefieldCol, fieldWithinSingleGamefieldRow, fieldWithinSingleGamefieldCol] = args;
 
