@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --mode development",
-    "test": "npm start",
+    "test": "node ./node_modules/mocha/bin/mocha test/**/test.js --require babel-register test\\**\\*_test.js",
     "webpack": "node ./node_modules/webpack/bin/webpack.js --mode production"
   },
   "repository": {
