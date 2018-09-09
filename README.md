@@ -1,53 +1,55 @@
-Tic Tac Toe
-===========
+# Ultimate Tic Tac Toe
 
-Browser based [Tic Tac Toe](https://en.wikipedia.org/wiki/Tic-tac-toe)
+[![Build Status](https://travis-ci.com/LBBO/tic_tac_toe.svg?branch=master)](https://travis-ci.com/LBBO/tic_tac_toe)
 
+Browser based, 2 player
+[Ultimate Tic Tac Toe](https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe).
 
-Gameplay
---------
+## Gameplay
 
-2 players play Tic Tac Toe taking turns on the same browser window (no network-multiplayer, no AI).
+2 players play Ultimate Tic Tac Toe taking turns on the same browser window (no
+network-multiplayer, no AI). To start, simply press the "New Game"
+button on the bottom of the screen. The current player is then displayed
+(and updated) where the button was and you can now make your move in any
+of the purple fields. The game can be aborted at any time by pressing
+the "Abort" button in the top right corner.
 
-You can find detailed information about the game on [Wikipedia](https://en.wikipedia.org/wiki/Tic-tac-toe).
+You can find more detailed information about the game on
+[Wikipedia](https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe). Please
+feel free to report any bugs or feature requests
+[here](https://github.com/LBBO/ultimate-tic-tac-toe/issues).
 
+## Getting Started
+### Prerequisites
+* First, you'll need to install [git](https://git-scm.com/downloads) and
+[Node.js](https://nodejs.org/en/download/).
+* Then you can clone this repository to your computer
 
-Target design
--------------
+### Installing
+Open a command line into this project's folder and type
+```
+npm install
+```
+Once that is done, you can start a local web server by typing
+```
+npm start
+```
+Lastly, you just need to open
+[http:/localhost:8080/](http:/localhost:8080/) and you're ready to go!
 
-![Design 1](https://cdn.rawgit.com/neopoly/tic_tac_toe/master/doc/design-1.png?v=2)
+## Running tests
+So far, there are only a few unit tests located in the test folder. To
+run them, yo can either run
+```
+npm test
+```
+In a command line or you can visit
+[http:/localhost:8080/test](http:/localhost:8080/test) while your web
+server is running.
 
-![Design 2](https://cdn.rawgit.com/neopoly/tic_tac_toe/master/doc/design-2.png?v=2)
-
-![Design 3](https://cdn.rawgit.com/neopoly/tic_tac_toe/master/doc/design-3.png?v=2)
-
-Environment
------------
-
-* [NodeJS](https://nodejs.org) (Version 10.x)
-
-Setup
------
-
-* Fork this project into your GitHub account
-* Clone your fork to your machine
-* In project folder:
-  * `npm install`
-
-
-Run, test, build
-----------------
-
-* Start dev server: `npm start`
-* To run the application open `http://localhost:8080/webpack-dev-server/`
-* To run tests open `http://localhost:8080/webpack-dev-server/test`
-* (Build release version to ./release: `npm run-script webpack`)
-
-Technologies used
------------------
-
-* [Webpack](https://github.com/webpack/webpack) for asset bundling
-* [React](https://facebook.github.io/react/) for web components
-* [Sass](http://sass-lang.com/) for CSS preprocessing
-* [Mocha](http://mochajs.org/) as test runner and [Chai](http://chaijs.com/) as assertion library
-* [Enzyme](http://airbnb.io/enzyme/) as a test renderer for React
+## Deployment
+```
+npm webpack
+```
+This will create a release folder which can be copied onto any server and
+into any folder.
