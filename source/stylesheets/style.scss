@@ -1,8 +1,36 @@
+//general colors
+$custom-dark-gray: #6C6C73;
+$customWhiteBackground: #F8F8F8;
+$abortTextColor: #E390C3;
+$winScreenTextColor: #A6A6AE;
+$newGameBackgroundcolor: #21C3A8;
+$footerTextColor: #9C9CAC;
+$playerXStrokeColor: #3a3b63;
+$playerOStrokeColor: #73dce6;
+
+//colors when game is running
+$gameBackgroundActive: #8A85BD;
+$fieldOfGamefieldsBorderColorWhenGameIsRunning: #5D588F;
+$singleGamefieldBorderColorWhenGameIsRunning: #746FA7;
+
+//colors when game is NOT running
+$gameBackgroundInactive: #ECECEE;
+$fieldOfGamefieldsBorderColorWhenGameIsNotRunning: #BFBFC2;
+$singleGamefieldBorderColorWhenGameIsNotRunning: #D6D6D9;
+
+$gameBoxSize: 802px; //extra two px in order to avoid child elements with widths like 203.33px
+$headerAndFooterHeight: 70px;
+$paddingBetweenHeaderFooterAndGamefield: 20px;
+$paddingAroundSingleGamefield: 15px;
+$totalGameFieldSize: $gameBoxSize - 2*$headerAndFooterHeight - 2*$paddingBetweenHeaderFooterAndGamefield;
+$borderWidth: 5px;
+$singleGameFieldSize: ($totalGameFieldSize - $borderWidth * 2) / 3 - $paddingAroundSingleGamefield * 2;
+
 html, body {
 	font-family: "Segoe UI", "Letter Gothic Std", Arial, sans-serif;
 	padding: 0;
 	margin: 0;
-	background-color: #6C6C73;
+	background-color: $custom-dark-gray;
 
 	#app {
 		display: grid;
@@ -13,47 +41,100 @@ html, body {
 		> div {
 			display: grid;
 			place-items: center;
-			width: 500px;
-			height: 500px;
-			grid-gap: 20px;
+			width: $gameBoxSize;
+			height: $gameBoxSize;
+			grid-gap: $paddingBetweenHeaderFooterAndGamefield;
+			background-color: $gameBackgroundInactive;
+
+			svg {
+				&.playerX {
+					stroke: $playerXStrokeColor;
+				}
+
+				&.playerO {
+					stroke: $playerOStrokeColor;
+				}
+			}
 
 			&.gameIsNotRunning {
-				background-color: #ECECEE;
-
 				.header {
 					grid-template-columns: auto;
 					grid-template-rows: auto;
 					grid-template-areas: "title";
 				}
 
-				.wrapper {
-					div {
-						border-right-color: #E7E7EA;
-						border-bottom-color: #E7E7EA;
+				.fieldOfGamefields {
+					.singleGamefield {
+						.field {
+							div {
+								&.empty {
+									cursor: default;
+								}
+
+								svg {
+									display: none;
+								}
+							}
+						}
+					}
+
+					.winner {
+						display: none;
 					}
 				}
 			}
 
 			&.gameIsRunning {
-				background-color: #8A85BD;
-
 				.header {
 					grid-template-columns: 100px auto 100px;
 					grid-template-rows: auto;
 					grid-template-areas: ". title abort";
 				}
 
-				.wrapper {
-					div {
-						border-right-color: #746FA7;
-						border-bottom-color: #746FA7;
+				.fieldOfGamefields {
+					&.chooseAny {
+						background-color: $fieldOfGamefieldsBorderColorWhenGameIsRunning;
+
+						.singleGamefield {
+							.field {
+								background-color: $gameBackgroundActive;
+
+								div {
+									border-color: $singleGamefieldBorderColorWhenGameIsRunning;
+								}
+							}
+						}
+					}
+
+					.singleGamefield {
+						&.active {
+							.field {
+								background-color: $gameBackgroundActive;
+
+								div {
+									border-color: $singleGamefieldBorderColorWhenGameIsRunning;
+
+									&.empty {
+										cursor: pointer;
+									}
+								}
+							}
+						}
+
+						&:not(.active) {
+							>:not(.winner) {
+								svg {
+									stroke: $custom-dark-gray;
+								}
+							}
+						}
 					}
 				}
 			}
 
 			.header, .footer {
-				height: 70px;
-				background-color: #F8F8F8;
+				height: $headerAndFooterHeight;
+				background-color: $customWhiteBackground;
 				width: 100%;
 			}
 
@@ -62,27 +143,27 @@ html, body {
 				place-items: center;
 
 				.title {
-					color: #6C6C73;
+					color: $custom-dark-gray;
 					font-size: 2.6em;
 					grid-area: title;
 				}
 
 				.abort {
 					grid-area: abort;
-					color: #E390C3;
+					color: $abortTextColor;
 					text-decoration: underline;
 					cursor: pointer;
 				}
 			}
 
 			.footer {
-				color: #9C9CAC;
+				color: $footerTextColor;
 				font-size: 1.4em;
 				display: grid;
 				place-items: center;
 
 				.newGame {
-					background-color: #21C3A8;
+					background-color: $newGameBackgroundcolor;
 					color: white;
 					padding: 7px 50px;
 					border-radius: 50px;
@@ -109,10 +190,10 @@ html, body {
 				grid-template-rows: auto min-content auto;
 				justify-items: center;
 				width: 100%;
-				height: 340px;
+				height: $totalGameFieldSize;
 				grid-gap: 10px;
 				font-size: 2.3em;
-				color: #A6A6AE;
+				color: $winScreenTextColor;
 
 				.winner {
 					grid-area: winner;
@@ -128,52 +209,98 @@ html, body {
 				}
 			}
 
-			.wrapper {
+			.fieldOfGamefields {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr;
 				grid-template-rows: 1fr 1fr 1fr;
 				place-items: center;
-				width: 340px;
-				height: 340px;
+				width: $totalGameFieldSize;
+				height: $totalGameFieldSize;
 				overflow: hidden;
-				grid-gap: 5px;
+				grid-gap: $borderWidth;
+				background-color: $fieldOfGamefieldsBorderColorWhenGameIsNotRunning;
 
 				&.hide {
 					display: none;
 				}
 
-				div {
-					border: 10px solid rgba(0, 0, 0, 0);
-					width: 100%;
-					height: 100%;
-					display: grid;
-					place-content: center;
-					font-weight: 900;
-					font-size: 4em;
+				.singleGamefield {
+					width: $singleGameFieldSize + $paddingAroundSingleGamefield * 2;
+					height: $singleGameFieldSize + $paddingAroundSingleGamefield * 2;
 
-					svg {
-						width: 70px;
-						height: 70px;
+					.field {
+						width: $singleGameFieldSize;
+						height: $singleGameFieldSize;
+						position: relative;
+						display: grid;
+						grid-template-columns: 1fr 1fr 1fr;
+						grid-template-rows: 1fr 1fr 1fr;
+						place-items: center;
+						overflow: hidden;
+						grid-gap: $borderWidth;
+						padding: $paddingAroundSingleGamefield;
+						background-color: $gameBackgroundInactive;
+
+						&.hide {
+							display: none;
+							color: #000000;
+						}
+
+						div {
+							border: $borderWidth solid $singleGamefieldBorderColorWhenGameIsNotRunning;
+							width: 100%;
+							height: 100%;
+							display: grid;
+							place-items: center;
+							font-weight: 900;
+							font-size: 4em;
+
+							&:nth-child(3n) {
+								border-right: none;
+							}
+
+							&:nth-child(3n - 2) {
+								border-left: none;
+							}
+
+							&:nth-last-child(-n + 3) {
+								border-bottom: none;
+							}
+
+							&:nth-child(-n + 3) {
+								border-top: none;
+							}
+
+							svg {
+								width: 70%;
+								height: auto;
+							}
+						}
 					}
 
-					&.empty {
-						cursor: pointer;
-					}
+					&.hasBeenWon {
+						.winner {
+							position: relative;
+							top: -($singleGameFieldSize + $paddingAroundSingleGamefield * 2);
+							z-index: 2;
+							opacity: 0.7;
+							padding: $paddingAroundSingleGamefield;
 
-					&:nth-child(3n) {
-						border-right: none;
-					}
+							&.O {
+								background-color: rgba(115, 220, 230, 0.5);
+							}
 
-					&:nth-child(3n - 2) {
-						border-left: none;
-					}
+							&.X {
+								background-color: rgba(58, 59, 99, 0.5);
+							}
 
-					&:nth-last-child(-n + 3) {
-						border-bottom: none;
-					}
-
-					&:nth-child(-n + 3) {
-						border-top: none;
+							&.empty {
+								height: 100%;
+								width: 100%;
+								background-color: rgba(200, 200, 200, 0.5);
+								padding: 0;
+							}
+						}
 					}
 				}
 			}

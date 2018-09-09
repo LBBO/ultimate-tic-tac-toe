@@ -8,3 +8,4 @@ lib-cov
 release
 node_modules
 .idea
+.nyc_output

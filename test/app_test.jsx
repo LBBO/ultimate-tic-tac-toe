@@ -5,8 +5,8 @@ import { mount } from "enzyme"
 
 describe("App component", () => {
   it("Display headline", () => {
-    const wrapper = mount(<App />)
+    const wrapper = mount(<App />);
 
-    assert.strictEqual(wrapper.find("h1").text(), "Insert Tic Tac Toe here.")
+    assert.strictEqual(wrapper.find("h1").text(), "Insert Tic Tac Toe here.");
   })
-})
+});
