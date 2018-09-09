@@ -5,7 +5,7 @@ import chai from "chai"
 Enzyme.configure({ adapter: new Adapter() });
 
 // You can list more individual test files here:
-require("Gamefield_test");
-require("SingleGamefield_test");
-require("FieldOfGamefields_test");
+require("./Gamefield_test");
+require("./SingleGamefield_test");
+require("./FieldOfGamefields_test");
 //require("app_test");
