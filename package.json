@@ -31,18 +31,18 @@
     "file-loader": "^1.1.0",
     "mocha": "^5.2.0",
     "mocha-loader": "^1.1.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.14.0",
     "nyc": "^13.0.1",
     "sass-loader": "^7.0.3",
     "sinon": "^6.0.1",
     "sinon-chai": "^3.2.0",
     "style-loader": "^0.21.0",
-    "webpack": "^4.11.1",
+    "webpack": "^4.43.0",
     "webpack-cli": "^3.0.3",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.13.1"
   }
 }
