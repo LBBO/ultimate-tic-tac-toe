@@ -29,6 +29,15 @@ module.exports = {
         }]
       },
       {
+        test: /\.yaml/,
+        use: [{
+          loader: "file-loader",
+          options: {
+            name: "[name].[ext]"
+          }
+        }]
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: ["babel-loader"]
